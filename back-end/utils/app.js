@@ -1,8 +1,11 @@
 const config = require('./config');
+const logger = require('./logger')
+
 const express = require('express');
 const cors = require('cors');
 const app = express();
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
+const projectRouter = require('../controllers/project');
 
 mongoose.set('strictQuery', false)
 
@@ -17,6 +20,9 @@ mongoose.connect(config.MONGODB_URI, { useUnifiedTopology: true, useNewUrlParser
   })
 
 app.use(cors());
+app.use(express.static('build'));
+app.use(express.json());
 
+app.use('/api/projects', projectRouter);
 module.exports = app;
 
