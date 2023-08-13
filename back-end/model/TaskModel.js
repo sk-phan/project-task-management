@@ -14,7 +14,7 @@ const taskSchema = new mongoose.Schema({
         enum: [ 'todo', 'ongoing', 'completed' ],
         default: 'todo'
     },
-    project: {
+    projectId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Project',
         required: true

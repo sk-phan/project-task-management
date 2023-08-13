@@ -6,6 +6,7 @@ const cors = require('cors');
 const app = express();
 const mongoose = require('mongoose');
 const projectRouter = require('../controllers/project');
+const taskRouter = require('../controllers/task');
 
 mongoose.set('strictQuery', false)
 
@@ -24,5 +25,6 @@ app.use(express.static('build'));
 app.use(express.json());
 
 app.use('/api/projects', projectRouter);
+app.use('/api/tasks', taskRouter);
 module.exports = app;
 

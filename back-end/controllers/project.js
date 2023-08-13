@@ -5,6 +5,7 @@ const Project = require("../model/ProjectModel");
 projectRouter.get('/', (req, res) => {
     Project.find()
     .then(project => res.json(project))
+    .catch(error => next(error))
 })
 
 projectRouter.get('/:id', async (req, res, next) => {
@@ -17,9 +18,10 @@ projectRouter.get('/:id', async (req, res, next) => {
             res.json(project);
         }
         else {
-            res.status(404);
+            res.status(404).end();
         }
     })
+    .catch(error => next(error))
 })
 
 projectRouter.post('/', async (req, res, next) => {
@@ -29,8 +31,48 @@ projectRouter.post('/', async (req, res, next) => {
         name: body.name
     });
 
-    const savedProject =  await newProject.save();
-    res.json(savedProject);
+    newProject.save()
+    .then(project => {
+        res.json(project);
+    })
+    .catch(error => next(error));
 });
+
+projectRouter.put('/update/:id', async (req, res, next) => {
+    const body = req.body;
+    const id = req.params.id;
+
+    const project = await Project.findById(id);
+
+    if (!project) {
+        return res.status(404);
+    }
+
+    Project.findByIdAndUpdate(
+        id,
+        body,
+        { new: true, runValidators: true, context: 'query' }    
+    )
+    .then(updatedProject => {
+        res.json(updatedProject)
+    })
+    .catch(error => next(error));
+
+    res.json(editedProject);
+});
+
+projectRouter.delete('/delete/:id', async (req, res, next) => {
+
+    const id = req.params.id;
+    
+    Project.findByIdAndRemove(id)
+    .then(() => {
+        res.status(204).end()
+    })
+    .catch(error => next(error))
+
+})
+
+
 
 module.exports = projectRouter;
