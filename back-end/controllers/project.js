@@ -1,5 +1,6 @@
 const projectRouter = require('express').Router();
 const Project = require("../model/ProjectModel");
+const Task = require('../model/TaskModel');
 
 
 projectRouter.get('/', (req, res) => {
@@ -63,13 +64,21 @@ projectRouter.put('/update/:id', async (req, res, next) => {
 
 projectRouter.delete('/delete/:id', async (req, res, next) => {
 
-    const id = req.params.id;
-    
-    Project.findByIdAndRemove(id)
-    .then(() => {
-        res.status(204).end()
-    })
-    .catch(error => next(error))
+    try {
+        const id = req.params.id;
+        
+        if (id) {
+            await Task.deleteMany({ projectId: id });
+            await Project.findByIdAndRemove(id);
+            res.status(204).end()
+        }
+        else {
+            res.status(404).end()
+        }
+    }
+    catch(e) {
+        next(e)
+    }
 
 })
 
