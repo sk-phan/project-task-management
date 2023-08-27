@@ -3,10 +3,17 @@ const Project = require("../models/ProjectModel");
 const Task = require('../models/TaskModel');
 
 
-projectRouter.get('/', (req, res) => {
-    Project.find()
-    .then(project => res.json(project))
-    .catch(error => next(error))
+projectRouter.get('/', async(req, res, next) => {
+
+    try {
+        const user = req.user
+        const projects = await Project.find({ user }).populate('task')
+
+        res.json(projects)
+    }
+    catch(e) {
+        next(e)
+    }
 })
 
 projectRouter.get('/:id', async (req, res, next) => {
