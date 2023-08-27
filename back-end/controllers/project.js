@@ -1,13 +1,15 @@
 const projectRouter = require('express').Router();
 const Project = require("../models/ProjectModel");
 const Task = require('../models/TaskModel');
+const User = require('../models/UserModel');
+const jwt = require('jsonwebtoken')
 
 
 projectRouter.get('/', async(req, res, next) => {
 
     try {
-        const user = req.user._id
-        const projects = await Project.find({ user }).populate('task')
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        const projects = await Project.find({ user: decodedToken.id })
 
         res.json(projects)
     }
@@ -36,17 +38,19 @@ projectRouter.post('/', async (req, res, next) => {
 
     try {
         const { name } = req.body;
-        const user = req.user;
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        
+        const currentUser = await User.findById( decodedToken.id )
 
         const project = new Project({
             name,
-            user: user._id
+            user: currentUser._id
         })
 
         const savedProject = await project.save()
-        user.projects = user.projects.concat(savedProject._id)
+        currentUser.projects = currentUser.projects.concat(savedProject._id)
         
-        await user.save()
+        await currentUser.save()
 
         res.status(201).json(savedProject)
     }

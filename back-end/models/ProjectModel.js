@@ -10,7 +10,11 @@ const projectSchema = new mongoose.Schema({
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Task'
         }
-    ]
+    ],
+    user:  {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User'
+    }
 })
 
 projectSchema.set('toJSON', {
@@ -18,7 +22,7 @@ projectSchema.set('toJSON', {
         returnedObject.id = returnedObject._id
 
         delete returnedObject._id
-        delete returnedObject._v
+        delete returnedObject.__v
     }
 })
 
