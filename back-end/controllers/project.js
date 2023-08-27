@@ -1,12 +1,21 @@
 const projectRouter = require('express').Router();
-const Project = require("../model/ProjectModel");
-const Task = require('../model/TaskModel');
+const Project = require("../models/ProjectModel");
+const Task = require('../models/TaskModel');
+const User = require('../models/UserModel');
+const jwt = require('jsonwebtoken')
 
 
-projectRouter.get('/', (req, res) => {
-    Project.find()
-    .then(project => res.json(project))
-    .catch(error => next(error))
+projectRouter.get('/', async(req, res, next) => {
+
+    try {
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        const projects = await Project.find({ user: decodedToken.id })
+
+        res.json(projects)
+    }
+    catch(e) {
+        next(e)
+    }
 })
 
 projectRouter.get('/:id', async (req, res, next) => {
@@ -26,17 +35,28 @@ projectRouter.get('/:id', async (req, res, next) => {
 })
 
 projectRouter.post('/', async (req, res, next) => {
-    const body = req.body;
-    
-    const newProject = await new Project({
-        name: body.name
-    });
 
-    newProject.save()
-    .then(project => {
-        res.json(project);
-    })
-    .catch(error => next(error));
+    try {
+        const { name } = req.body;
+        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        
+        const currentUser = await User.findById( decodedToken.id )
+
+        const project = new Project({
+            name,
+            user: currentUser._id
+        })
+
+        const savedProject = await project.save()
+        currentUser.projects = currentUser.projects.concat(savedProject._id)
+        
+        await currentUser.save()
+
+        res.status(201).json(savedProject)
+    }
+    catch(error) {
+        next(error)
+    };
 });
 
 projectRouter.put('/update/:id', async (req, res, next) => {
