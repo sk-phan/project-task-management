@@ -14,10 +14,26 @@ const taskSchema = new mongoose.Schema({
         enum: [ 'todo', 'ongoing', 'completed' ],
         default: 'todo'
     },
-    projectId: {
+    project: [
+        {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'Project',
+            required: true
+        }
+    ],
+    user: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: 'Project',
+        ref: 'User',
         required: true
+    }
+})
+
+taskSchema.set('toJSON', {
+    transform: ( document, returnedObject ) => {
+        returnedObject.id = returnedObject._id
+
+        delete returnedObject._id
+        delete returnedObject._v
     }
 })
 
