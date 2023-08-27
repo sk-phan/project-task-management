@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 const projectRouter = require('../controllers/project');
 const taskRouter = require('../controllers/task');
 const userRouter = require('../controllers/user');
+const loginRouter = require('../controllers/login');
 
 mongoose.set('strictQuery', false)
 
@@ -28,9 +29,10 @@ app.use(express.json());
 app.use(middleware.requestLogger);
 app.use(middleware.tokenExtract);
 
+app.use('/api/login', loginRouter);
+app.use('/api/user', userRouter);
 app.use('/api/projects', projectRouter);
 app.use('/api/tasks', taskRouter);
-app.use('/api/user', userRouter);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandler);

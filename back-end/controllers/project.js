@@ -6,7 +6,7 @@ const Task = require('../models/TaskModel');
 projectRouter.get('/', async(req, res, next) => {
 
     try {
-        const user = req.user
+        const user = req.user._id
         const projects = await Project.find({ user }).populate('task')
 
         res.json(projects)
@@ -33,17 +33,26 @@ projectRouter.get('/:id', async (req, res, next) => {
 })
 
 projectRouter.post('/', async (req, res, next) => {
-    const body = req.body;
-    
-    const newProject = await new Project({
-        name: body.name
-    });
 
-    newProject.save()
-    .then(project => {
-        res.json(project);
-    })
-    .catch(error => next(error));
+    try {
+        const { name } = req.body;
+        const user = req.user;
+
+        const project = new Project({
+            name,
+            user: user._id
+        })
+
+        const savedProject = await project.save()
+        user.projects = user.projects.concat(savedProject._id)
+        
+        await user.save()
+
+        res.status(201).json(savedProject)
+    }
+    catch(error) {
+        next(error)
+    };
 });
 
 projectRouter.put('/update/:id', async (req, res, next) => {
