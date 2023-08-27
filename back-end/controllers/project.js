@@ -1,6 +1,6 @@
 const projectRouter = require('express').Router();
-const Project = require("../model/ProjectModel");
-const Task = require('../model/TaskModel');
+const Project = require("../models/ProjectModel");
+const Task = require('../models/TaskModel');
 
 
 projectRouter.get('/', (req, res) => {
