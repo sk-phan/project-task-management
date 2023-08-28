@@ -1,86 +1,114 @@
 const taskRouter = require('express').Router();
+const Project = require('../models/ProjectModel');
 const Task = require('../models/TaskModel');
 
 //Get all tasks
-taskRouter.get('/', async(req, res, next) => {
-    Task.find()
-    .then(tasks => res.json(tasks))
-    .catch(error => next(error))
+taskRouter.get('/:projectId', async(req, res, next) => {
+
+    try {
+        const project= req.params.projectId
+    
+        if (!project) {
+            res.status(404).end()
+        }
+        
+        const tasks = await Task.find({ project })
+        res.json(tasks)
+    }
+    catch(e) {
+        next(e)
+    }
+    
 })
 
 //Get single task
 taskRouter.get('/:id', async(req, res, next) => {
 
-    const id = req.params.id;
+    try {
+        const id = req.params.id;
 
-    Task.findById(id)
-    .then(task => {
-        if (task) {
-            res.json(task)
-        }
-        else {
+        const task = Task.findById(id)
+
+        if (!task) {
             res.status(404).end()
         }
-    })
-    .catch(error => next(error))
+
+        res.json(task)
+    }
+    catch(e) {
+        next(e)
+    }
 })
 
-//Get tasks by project id
-taskRouter.get('/project/:projectId', async(req, res, next) => {
-    const projectId = req.params.projectId;
-
-    Task.find({ projectId })
-    .then(task => {
-        if (task) {
-            res.json(task)
-        }
-        else {
-            res.status(404).end()
-        }
-    })
-    .catch(error => next(error))
-})
 
 //Creae new task
 taskRouter.post('/', async(req, res, next) => {
-    const body = req.body;
 
-    const newTask = new Task({
-        name: body.name,
-        dueDate: body.dueDate,
-        status: body.status,
-        projectId: body.projectId
-    })
+    try {
+        const body = req.body;
+        const projectId = body.projectId
+    
+        const task = new Task({
+            name: body.name,
+            dueDate: body.dueDate,
+            status: body.status,
+            project: projectId,
+            user: req.user._id
+        })
+    
+        const newTask =  await task.save()
+       
+        const project = await Project.findById(projectId)
+        project.tasks = project.tasks.concat(newTask._id)
+        await project.save()
+    
+        res.json(project)
+    }
+    catch(e) {
+        next(e)
+    }
 
-    newTask.save()
-    .then(task => res.json(task))
-    .catch(error => next(error))
 })
 
 //Update a task
 taskRouter.put('/update/:id', async(req, res, next) => {
-    const body = req.body;
-    const id = req.params.id;
 
-    Task.findByIdAndUpdate(id, body, { new: true, runValidators: true, context: 'query' })
-    .then(updatedTask => res.json(updatedTask))
-    .catch(error => next(error))
-
+    try {
+        const body = req.body;
+        const id = req.params.id;
+    
+        if (!id) {
+            res.status(404).end()
+        }
+        
+        const updatedTask = await Task.findByIdAndUpdate(
+                                        id, 
+                                        body, 
+                                        { new: true, runValidators: true, context: 'query' }
+                                    )
+        
+        res.json(updatedTask)
+    }
+    catch(e){
+        next(e)
+    }
 })
 
 //Delete a task
-taskRouter.put('/delete/:id', async(req, res, next) => {
-    const id = req.params.id;
+taskRouter.delete('/delete/:id', async(req, res, next) => {
+    try {
+        const id = req.params.id;
+    
+        if (!id) {
+            res.status(404).end()
+        }
 
-    if (id) {
-        Task.findByIdAndRemove(id)
-        .then(() => res.status(204).end)
-        .catch(error => next(error))
+        await Task.findByIdAndRemove(id)
+        res.status(204).end()
     }
-    else {
-        res.status(404).end()
+    catch(e) {
+        next(e)
     }
-
 })
 
 
