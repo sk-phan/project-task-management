@@ -4,12 +4,11 @@ const Task = require('../models/TaskModel');
 const User = require('../models/UserModel');
 const jwt = require('jsonwebtoken')
 
-
 projectRouter.get('/', async(req, res, next) => {
 
     try {
-        const decodedToken = jwt.verify(req.token, process.env.SECRET)
-        const projects = await Project.find({ user: decodedToken.id })
+        const user = req.user
+        const projects = await Project.find({ user: user._id })
 
         res.json(projects)
     }
@@ -20,27 +19,26 @@ projectRouter.get('/', async(req, res, next) => {
 
 projectRouter.get('/:id', async (req, res, next) => {
 
-    const id = req.params.id;
+    try {
 
-    Project.findById(id)
-    .then(project => {
-        if (project) {
-            res.json(project);
-        }
-        else {
-            res.status(404).end();
-        }
-    })
-    .catch(error => next(error))
+        const projectId = req.params.id;
+
+        const project = await Project.findById(projectId)
+
+        res.json(project)
+
+    }
+    catch(e) {
+        next(e)
+    }
 })
 
 projectRouter.post('/', async (req, res, next) => {
 
     try {
-        const { name } = req.body;
-        const decodedToken = jwt.verify(req.token, process.env.SECRET)
+        const { name } = req.body
         
-        const currentUser = await User.findById( decodedToken.id )
+        const currentUser = req.user
 
         const project = new Project({
             name,
@@ -48,6 +46,7 @@ projectRouter.post('/', async (req, res, next) => {
         })
 
         const savedProject = await project.save()
+
         currentUser.projects = currentUser.projects.concat(savedProject._id)
         
         await currentUser.save()
@@ -60,26 +59,27 @@ projectRouter.post('/', async (req, res, next) => {
 });
 
 projectRouter.put('/update/:id', async (req, res, next) => {
-    const body = req.body;
-    const id = req.params.id;
-
-    const project = await Project.findById(id);
-
-    if (!project) {
-        return res.status(404);
+    try {
+        const body = req.body;
+        const id = req.params.id;
+    
+        const project = await Project.findById(id);
+    
+        if (!project) {
+            return res.status(404);
+        }
+    
+        const updatedProject = await Project.findByIdAndUpdate( 
+                                        id,
+                                        body,
+                                        { new: true, runValidators: true, context: 'query' }    
+                                    )
+    
+        res.json(updatedProject);
     }
-
-    Project.findByIdAndUpdate(
-        id,
-        body,
-        { new: true, runValidators: true, context: 'query' }    
-    )
-    .then(updatedProject => {
-        res.json(updatedProject)
-    })
-    .catch(error => next(error));
-
-    res.json(editedProject);
+    catch(e) {
+        next(e)
+    }
 });
 
 projectRouter.delete('/delete/:id', async (req, res, next) => {
@@ -88,12 +88,12 @@ projectRouter.delete('/delete/:id', async (req, res, next) => {
         const id = req.params.id;
         
         if (id) {
-            await Task.deleteMany({ projectId: id });
+            await Task.deleteMany({ project: id });
             await Project.findByIdAndRemove(id);
-            res.status(204).end()
+            res.status(204).send()
         }
         else {
-            res.status(404).end()
+            res.status(404).send()
         }
     }
     catch(e) {

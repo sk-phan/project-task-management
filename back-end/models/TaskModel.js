@@ -14,13 +14,13 @@ const taskSchema = new mongoose.Schema({
         enum: [ 'todo', 'ongoing', 'completed' ],
         default: 'todo'
     },
-    project: [
+    project: 
         {
             type: mongoose.Schema.Types.ObjectId,
             ref: 'Project',
             required: true
         }
-    ],
+    ,
     user: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'User',
