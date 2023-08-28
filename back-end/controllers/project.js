@@ -2,7 +2,6 @@ const projectRouter = require('express').Router();
 const Project = require("../models/ProjectModel");
 const Task = require('../models/TaskModel');
 const User = require('../models/UserModel');
-const jwt = require('jsonwebtoken')
 
 projectRouter.get('/', async(req, res, next) => {
 
@@ -22,7 +21,11 @@ projectRouter.get('/:id', async (req, res, next) => {
     try {
 
         const projectId = req.params.id;
-
+        
+        if (!projectId) {
+            res.status(404).end()
+        }
+        
         const project = await Project.findById(projectId)
 
         res.json(project)
