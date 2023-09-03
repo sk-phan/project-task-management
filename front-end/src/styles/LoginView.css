@@ -39,7 +39,8 @@
     border-bottom: 1px solid #333;
     outline: none;
     transition: border-color 0.3s;
-    box-sizing: border-box; /* Add box-sizing property */
+    box-sizing: border-box; 
+    font-size: 1rem;
 }
 
 .input-field:active {
