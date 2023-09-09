@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+html {
+  font-size: 16px; /* 1rem = 16px */
+}
+.dark-bg {
+  background: #1a1a1a;
+}
+
+@media (max-width: 768px) {
+  html {
+    font-size: 14px; /* Adjust the base font size for smaller screens */
+  }
+}

@@ -1,12 +1,10 @@
 import './App.css';
-import TestA from './components/TestA';
+import LoginView from './views/LoginView';
 
-function App() {
+const App = () => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <TestA />
-      </header>
+    <div>
+      <LoginView />
     </div>
   );
 }

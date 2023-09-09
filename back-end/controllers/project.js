@@ -1,7 +1,6 @@
 const projectRouter = require('express').Router();
 const Project = require("../models/ProjectModel");
 const Task = require('../models/TaskModel');
-const User = require('../models/UserModel');
 
 projectRouter.get('/', async(req, res, next) => {
 

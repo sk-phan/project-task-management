@@ -11,13 +11,19 @@ userRouter.post('/', async (req, res, next) => {
         const saltRound = 10
         const passwordHash = await bcrypt.hash(password, saltRound)
     
-        const newUser = new User({ email, passwordHash })
+        const newUser = await new User({ email, passwordHash })
     
         const savedUser = await newUser.save()
     
         res.status(201).json(savedUser)
     }
     catch(e) {
+        console.log(e.code, e.keyPattern, "hello")
+        if (e.code === 11000 && e.keyPattern && e.keyPattern.email === 1) {
+            // This error code (11000) indicates a duplicate key error.
+            // The keyPattern.email === 1 checks if the duplicate key is for the 'email' field.
+            return res.status(400).json({ error: 'User with this email already exists.' });
+        }
         next(e)
     }
 })
