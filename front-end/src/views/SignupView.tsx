@@ -14,8 +14,8 @@ const SignupView = () => {
                 </form>
 
                 <div className='signup-link'>
-                    <span>Don't have an account?</span>
-                    <Link to='signup'>Signup</Link>
+                    <span>Already a user?</span>
+                    <Link to='/login'>Login</Link>
                 </div>
             </div>
             <div className="login-image-container">

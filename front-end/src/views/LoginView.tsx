@@ -55,7 +55,7 @@ const LoginView = () => {
 
                 <div className='signup-link'>
                     <span>Don't have an account?</span>
-                    <Link to='signup'>Signup</Link>
+                    <Link to='/signup'>Signup</Link>
                 </div>
             </div>
             <div className="login-image-container">
