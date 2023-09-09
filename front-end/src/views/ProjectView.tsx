@@ -1,8 +1,11 @@
+import ProjectSideBar from "../components/ProjectsSideBar"
 
 const ProjectView = () => {
     
     return (
-        <p>Peroject</p>
+        <div>
+            <ProjectSideBar />
+        </div>
     )
 }
 
