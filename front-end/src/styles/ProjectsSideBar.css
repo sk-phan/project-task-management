@@ -1,0 +1,10 @@
+.project-name-card {
+    padding: 8px 6px;
+    cursor: pointer;
+    /* border-bottom: solid 1px #eee; */
+}
+
+.project-name-card:hover {
+    background-color: var(--light-blue);
+    /* border-bottom: solid 1px #eee; */
+}

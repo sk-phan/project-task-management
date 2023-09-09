@@ -3,7 +3,7 @@ import { Project } from "../types";
 
 const projectService = {
     getAll() {
-        return api.get('/projects');
+        return api.get<Project[]>('/projects');
     },
     getOne(projectId: string) {
         return api.get('/projects/' +  projectId)
