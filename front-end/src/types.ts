@@ -1,12 +1,16 @@
 
+export type Status = 'todo' | 'ongoing' | 'completed';
+
+
 export interface Task {
     name: string;
     dueDate: string;
-    status: 'todo' | 'ongoing' | 'completed';
     project: string;
+    status: Status;
     user: string;
     id: string;
 }
+
 
 export interface Project {
     name: string;

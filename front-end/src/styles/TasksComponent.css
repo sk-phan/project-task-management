@@ -8,11 +8,27 @@
 
 .status-bar li {
   margin-right: 3rem;
-  position: relative;
+}
+
+.status-bar > li > button {
+  background-color: transparent;
+  border: none; 
   cursor: pointer;
 }
 
-.status-bar li::after {
+.status-bar > li > button {
+  background-color: transparent;
+  border: none; 
+  padding: 4px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.status-bar > li > button:hover {
+  background-color: #eee;
+}
+
+.active-status::after {
   content: "";
   position: absolute;
   background-color: #000;
@@ -20,13 +36,5 @@
   width: 100%;
   bottom: -5px;
   left: 0;
-  visibility: hidden; /* Initially hidden */
-  opacity: 0; 
-  transition: visibility 0s, opacity 0.3s;
-}
-
-.status-bar li:hover::after {
-  visibility: visible; 
-  opacity: 1; 
 }
 
