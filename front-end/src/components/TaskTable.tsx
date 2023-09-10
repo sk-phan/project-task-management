@@ -7,6 +7,10 @@ interface Props {
 
 const TaskTable = ({ tasks } : Props) => {
 
+    const onChangeTaskName = (name: string) => {
+
+    }
+
     return (
         <table className="custom-table">
             <thead>
@@ -19,9 +23,15 @@ const TaskTable = ({ tasks } : Props) => {
             <tbody>
                 {tasks.map((item) => (
                 <tr key={item.id}>
-                    <td>{item.name}</td>
-                    <td>{new Date(item.dueDate).toLocaleString()}</td>
-                    <td>{item.status}</td>
+                    <td className="field">
+                        <input 
+                        className="editable-input" 
+                        value={item.name} 
+                        type="text" 
+                        onChange={(e) => onChangeTaskName(e.target.value)}/>
+                    </td>
+                    <td className="field">{new Date(item.dueDate).toLocaleString()}</td>
+                    <td className="field">{item.status}</td>
                 </tr>
                 ))}
             </tbody>

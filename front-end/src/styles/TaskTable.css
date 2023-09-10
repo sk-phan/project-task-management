@@ -6,7 +6,7 @@
   .custom-table th, .custom-table td {
     text-align: left;
     padding: 8px;
-    border: 1px solid #ccc; /* Add border to cells */
+    border: 1px solid #ccc;
   }
   
   .custom-table th {
@@ -14,10 +14,18 @@
   }
   
   .custom-table tbody tr:nth-child(even) {
-    background-color: #f2f2f2; /* Alternate row background color */
+    background-color: #f2f2f2; 
   }
   
-  .custom-table tbody tr:hover {
-    background-color: #ddd; /* Hover row background color */
+  .field:hover {
+    background: #eee; 
   }
+
+  .editable-input {
+    border: none;
+    background: transparent; 
+    width: 100%;
+    outline: none; 
+  }
+
   
