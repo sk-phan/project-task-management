@@ -2,6 +2,7 @@ import { Status, Task } from "../types";
 import "../styles/TasksComponent.css";
 import TaskTable from "./TaskTable";
 import { useEffect, useState } from "react";
+import taskService from "../utils/taskService";
 
 interface PropsType {
     projectName: string;
@@ -23,6 +24,36 @@ const TasksComponent = ({ projectName, tasks } : PropsType) => {
         const taskData = tasks.filter(tasks => tasks.status === item)
         setViewedTasks(taskData)
     }   
+  
+    const updateTask = (type: string, value: string, id: string) => {
+        
+        const updatedTasks = viewedTasks.map((task) => {
+            if (task.id === id) {
+              if (type === "name") {
+                return { ...task, name: value };
+              }
+              else if (type === "dueDate") {
+                const isoDate = new Date(value).toISOString();
+                return { ...task, dueDate: isoDate };
+              }
+              else if (type === "status") {
+                return { ...task, status: value as 'todo' | 'ongoing' | 'completed'}; 
+            }
+            }
+            return task;
+          });
+
+        setViewedTasks(updatedTasks)
+
+        const editedTask = updatedTasks.find((task) => task.id === id);
+
+        if (editedTask) {
+
+            taskService.update(editedTask)
+            .then(res => console.log(res.data))
+            .catch(e => console.log(e))
+        }
+    }
 
     return (
         <div>
@@ -38,7 +69,7 @@ const TasksComponent = ({ projectName, tasks } : PropsType) => {
                     <button className={status === 'completed' ? 'active-status' : ''} onClick={() => setTaskStatus('completed')}>🎉 Done</button>
                 </li>
             </ul>
-            <TaskTable tasks={viewedTasks}/>
+            <TaskTable tasks={viewedTasks} updateTask={updateTask}/>
         </div>
     )
 }

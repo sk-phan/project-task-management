@@ -4,36 +4,23 @@ import taskService from "../utils/taskService"
 import { useEffect, useState } from "react"
 
 interface Props {
-    tasks: Task[]
+    tasks: Task[];
+    updateTask: (type: string, value: string, id: string) => void;
 }
 
-const TaskTable = ({ tasks } : Props) => {
+const TaskTable = ({ tasks, updateTask } : Props) => {
 
     const [ taskItems, setTaskItems ] = useState<Task[]>(tasks)
 
     useEffect(() => setTaskItems(tasks), [tasks])
-    
-    const onUpdateTask = (type: string, value: string, id: string) => {
-        const updatedTasks = taskItems.map((task) => {
-            if (task.id === id) {
-              if (type === "name") {
-                return { ...task, name: value };
-              }
-            }
-            return task;
-          });
 
-        setTaskItems(updatedTasks)
-
-        const editedTask = updatedTasks.find((task) => task.id === id);
-
-        if (editedTask) {
-
-            taskService.update(editedTask)
-            .then(res => console.log(res.data))
-            .catch(e => console.log(e))
-        }
-    }
+    const toLocalDateTime = (isoDate: string) => {
+        const date = new Date(isoDate);
+        const localDate = new Date(
+          date.getTime() - date.getTimezoneOffset() * 60000
+        );
+        return localDate.toISOString().slice(0, 16);
+      };
 
     return (
         <table className="custom-table">
@@ -52,10 +39,26 @@ const TaskTable = ({ tasks } : Props) => {
                         className="editable-input" 
                         value={item.name} 
                         type="text" 
-                        onChange={(e) => onUpdateTask('name', e.target.value, item.id)}/>
+                        onChange={(e) => updateTask('name', e.target.value, item.id)}/>
                     </td>
-                    <td className="field">{new Date(item.dueDate).toLocaleString()}</td>
-                    <td className="field">{item.status}</td>
+                    <td className="field">
+                        <input 
+                            className="editable-input" 
+                            value={toLocalDateTime(item.dueDate)}
+                            type="datetime-local" 
+                            onChange={(e) => updateTask('dueDate', e.target.value, item.id)}/>
+                    </td>
+                    <td className="field">
+                    <select
+                        className="status-select"
+                        value={item.status}
+                        onChange={(e) => updateTask("status", e.target.value, item.id)}
+                    >
+                        <option value="ongoing">Ongoing</option>
+                        <option value="todo">Todo</option>
+                        <option value="completed">Completed</option>
+                    </select>
+                    </td>
                 </tr>
                 ))}
             </tbody>
