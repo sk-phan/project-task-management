@@ -16,6 +16,10 @@
   .custom-table tbody tr:nth-child(even) {
     background-color: #f2f2f2; 
   }
+
+  .field {
+    font-size: 1rem;
+  }
   
   .field:hover {
     background: #eee; 
@@ -26,6 +30,7 @@
     background: transparent; 
     width: 100%;
     outline: none; 
+    font-size: 1rem;
   }
 
   
