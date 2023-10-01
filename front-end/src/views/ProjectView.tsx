@@ -5,11 +5,14 @@ import projectService from "../utils/projectService"
 import '../styles/ProjectView.css'
 import TasksComponent from "../components/TasksComponent"
 import taskService from "../utils/taskService"
+import { useAppDispatch } from "../store/hook"
+import { setTasks } from "../store/counterReducer";
 
 const ProjectView = () => {
     const [projects, setProjects] = useState<Project[]>([])
-    const [tasks, setTasks] = useState<Task[]>([])
     
+    const dispatch = useAppDispatch()
+
     useEffect(() => {
 
         projectService.getAll()
@@ -28,7 +31,7 @@ const ProjectView = () => {
             taskService.getAll(projects[1].id)
             .then((res) => {
                 if (res.data) {
-                    setTasks(res.data)
+                    dispatch(setTasks(res.data)); // Dispatch the action to update Redux store
                 }
             })
             .catch((error) => {
@@ -48,7 +51,6 @@ const ProjectView = () => {
             {projects.length > 0 && <div className="tasks-container">
                 <TasksComponent 
                 projectName={projects[1].name}
-                tasks={tasks}
                 />
             </div>}
         </div>
