@@ -3,21 +3,25 @@ import "../styles/TasksComponent.css";
 import TaskTable from "./TaskTable";
 import { useEffect, useState } from "react";
 import taskService from "../utils/taskService";
+import { useAppDispatch, useAppSelector } from "../store/hook";
+import { setTasks } from "../store/counterReducer";
 
 interface PropsType {
     projectName: string;
-    tasks: Task[];
 }
-const TasksComponent = ({ projectName, tasks } : PropsType) => {
+const TasksComponent = ({ projectName } : PropsType) => {
     const [ viewedTasks, setViewedTasks ] = useState<Task[]>([])
     const [ status, setStatus ] = useState<Status>('ongoing')
 
+    const dispatch = useAppDispatch()
+    const tasks = useAppSelector(state => state.counter.tasks)
+
     useEffect(() => {
         if (tasks.length > 0) {
-            const taskData = tasks.filter(task => task.status === "ongoing")
+            const taskData = tasks.filter(task => task.status === status)
             setViewedTasks(taskData)
         }
-    }, [tasks])
+    }, [tasks, status])
     
     const setTaskStatus = (item: Status) => {
         setStatus(item)
@@ -27,7 +31,7 @@ const TasksComponent = ({ projectName, tasks } : PropsType) => {
   
     const updateTask = (type: string, value: string, id: string) => {
         
-        const updatedTasks = viewedTasks.map((task) => {
+        const updatedTasks = tasks.map((task) => {
             if (task.id === id) {
               if (type === "name") {
                 return { ...task, name: value };
@@ -43,8 +47,11 @@ const TasksComponent = ({ projectName, tasks } : PropsType) => {
             return task;
           });
 
-        setViewedTasks(updatedTasks)
-
+          console.log(updatedTasks)
+    
+          dispatch(setTasks(updatedTasks))
+          setViewedTasks(updatedTasks)
+          
         const editedTask = updatedTasks.find((task) => task.id === id);
 
         if (editedTask) {
@@ -69,7 +76,7 @@ const TasksComponent = ({ projectName, tasks } : PropsType) => {
                     <button className={status === 'completed' ? 'active-status' : ''} onClick={() => setTaskStatus('completed')}>🎉 Done</button>
                 </li>
             </ul>
-            <TaskTable tasks={viewedTasks} updateTask={updateTask}/>
+            <TaskTable viewedTasks={viewedTasks} updateTask={updateTask}/>
         </div>
     )
 }

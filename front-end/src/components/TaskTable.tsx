@@ -1,18 +1,17 @@
 import { Task } from "../types"
 import "../styles/TaskTable.css"
-import taskService from "../utils/taskService"
 import { useEffect, useState } from "react"
 
 interface Props {
-    tasks: Task[];
+    viewedTasks: Task[];
     updateTask: (type: string, value: string, id: string) => void;
 }
 
-const TaskTable = ({ tasks, updateTask } : Props) => {
+const TaskTable = ({ viewedTasks, updateTask } : Props) => {
 
-    const [ taskItems, setTaskItems ] = useState<Task[]>(tasks)
+    const [ taskItems, setTaskItems ] = useState<Task[]>(viewedTasks)
 
-    useEffect(() => setTaskItems(tasks), [tasks])
+    useEffect(() => setTaskItems(viewedTasks), [viewedTasks])
 
     const toLocalDateTime = (isoDate: string) => {
         const date = new Date(isoDate);
