@@ -40,7 +40,7 @@ const ProjectView = () => {
                 console.error('Error fetching tasks:', error);
             });
         }
-    }, [projectIndex])
+    }, [projects,projectIndex])
 
     const setCurrentProject = (index: number) => {
         dispatch(setProject(projects[index]))

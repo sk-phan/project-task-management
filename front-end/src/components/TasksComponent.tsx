@@ -95,7 +95,9 @@ const TasksComponent = ({ project} : PropsType) => {
     const saveTask = (newTask: Task) => {
         taskService
         .create(newTask)
-        .then(res => console.log(res.data))
+        .then(res => {
+            dispatch(setTasks([res.data, ...tasks]))
+        })
     }
 
     return (
