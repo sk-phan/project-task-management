@@ -1,3 +1,6 @@
+.task {
+  margin: 12px 24px;
+}
 .status-bar {
   display: flex;
   flex-direction: row;
@@ -38,3 +41,16 @@
   left: 0;
 }
 
+.new-task-btn {
+  background-color: var(--primary-yellow);
+  color: #000;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 10px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.new-task-btn:hover {
+  opacity: 0.75;
+}

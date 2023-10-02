@@ -6,8 +6,10 @@
 .projects-container {
     flex: 1;
     width: 30%;
-    /* border-right: 1px solid #eee; */
     margin-right: 12px;
+    background-color: black;
+    min-height: 100vh;
+    height: 100%;
 }
 
 .tasks-container {

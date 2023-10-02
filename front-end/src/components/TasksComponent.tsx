@@ -1,4 +1,4 @@
-import { Status, Task } from "../types";
+import { Project, Status, Task } from "../types";
 import "../styles/TasksComponent.css";
 import TaskTable from "./TaskTable";
 import { useEffect, useState } from "react";
@@ -7,9 +7,9 @@ import { useAppDispatch, useAppSelector } from "../store/hook";
 import { setTasks } from "../store/counterReducer";
 
 interface PropsType {
-    projectName: string;
+    project: Project;
 }
-const TasksComponent = ({ projectName } : PropsType) => {
+const TasksComponent = ({ project} : PropsType) => {
     const [ viewedTasks, setViewedTasks ] = useState<Task[]>([])
     const [ status, setStatus ] = useState<Status>('ongoing')
 
@@ -21,6 +21,7 @@ const TasksComponent = ({ projectName } : PropsType) => {
             const taskData = tasks.filter(task => task.status === status)
             setViewedTasks(taskData)
         }
+        else setViewedTasks([])
     }, [tasks, status])
     
     const setTaskStatus = (item: Status) => {
@@ -46,8 +47,6 @@ const TasksComponent = ({ projectName } : PropsType) => {
             }
             return task;
           });
-
-          console.log(updatedTasks)
     
           dispatch(setTasks(updatedTasks))
           setViewedTasks(updatedTasks)
@@ -62,9 +61,50 @@ const TasksComponent = ({ projectName } : PropsType) => {
         }
     }
 
+    const openModel = () => {
+        try {
+            setStatus('todo')
+
+            setTimeout(() => {
+                const date = new Date();
+                const localDate = new Date(
+                  date.getTime() - date.getTimezoneOffset() * 60000
+                );
+                const dueDate = localDate.toISOString().slice(0, 16);
+                const newTask = { 
+                    name: "",
+                    dueDate: dueDate,
+                    project: project.id,
+                    status: "todo" as Status,
+                    user: project.user,
+                    id: ""
+                }
+                
+                setViewedTasks(viewedTasks => [ newTask,...viewedTasks])
+
+                saveTask(newTask)
+
+            }, 200)
+        }
+        catch(e) {
+            console.log("Error at creating new task", e)
+        }
+
+    }
+
+    const saveTask = (newTask: Task) => {
+        taskService
+        .create(newTask)
+        .then(res => console.log(res.data))
+    }
+
     return (
-        <div>
-            <h2>{projectName}</h2>
+        <div className="task">
+            <div className="d-flex justify-space-between align-center">
+                <h2>{project.name}</h2>
+                <button className="new-task-btn" onClick={() => openModel()}>New task</button>
+            </div>
+
             <ul className="status-bar">
                 <li>
                     <button className={status === 'ongoing' ? 'active-status' : ''} onClick={() => setTaskStatus('ongoing')}>🎯 In progress</button>

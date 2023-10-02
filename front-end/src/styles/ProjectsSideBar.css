@@ -1,9 +1,6 @@
 .project-name-card {
     padding: 8px 6px;
     cursor: pointer;
-    background-color: black;
-    min-height: 100vh;
-    height: 100%;
     color: #fff;
     /* border-bottom: solid 1px #eee; */
 }

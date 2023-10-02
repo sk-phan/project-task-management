@@ -46,7 +46,7 @@ taskRouter.post('/', async(req, res, next) => {
 
     try {
         const body = req.body;
-        const projectId = body.projectId
+        const projectId = body.project
     
         const task = new Task({
             name: body.name,

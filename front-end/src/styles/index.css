@@ -49,6 +49,18 @@ html {
   background-color: #fff !important;
 }
 
+.d-flex {
+  display: flex;
+}
+
+.align-center {
+  align-items: center;
+}
+
+.justify-space-between {
+  justify-content: space-between ;
+}
+
 @media (max-width: 768px) {
   html {
     font-size: 14px; /* Adjust the base font size for smaller screens */
