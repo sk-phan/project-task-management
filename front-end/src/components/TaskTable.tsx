@@ -56,6 +56,8 @@ const TaskTable = ({ viewedTasks, updateTask, deleteTask } : Props) => {
                         className="status-select"
                         value={item.status}
                         onChange={(e) => updateTask("status", e.target.value, item.id)}
+                        style={{ 
+                            backgroundColor: item.status === 'ongoing' ? '#feeec4ac' : item.status === 'todo' ? '#ffd8d696' : '#ceefdf86'}}
                     >
                         <option value="ongoing">Ongoing</option>
                         <option value="todo">Todo</option>

@@ -43,11 +43,11 @@
 }
 
 .new-task-btn {
-  background-color: var(--primary-yellow);
-  color: #000;
+  background-color: var(--primary-blue);
+  color: #ffffff;
   border: none;
-  padding: 10px 18px;
-  border-radius: 10px;
+  padding: 8px 18px;
+  border-radius: 6px;
   font-size: 1rem;
   cursor: pointer;
 }
