@@ -14,7 +14,7 @@ const projectService = {
     update(project: Project) {
         return api.put('projects/update/' + project.id, project )
     },
-    delete(projectId: number) {
+    delete(projectId: string) {
         return api.delete('projects/delete/' + projectId)
     }
 };

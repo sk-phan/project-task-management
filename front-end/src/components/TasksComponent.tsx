@@ -5,13 +5,19 @@ import { useEffect, useState } from "react";
 import taskService from "../utils/taskService";
 import { useAppDispatch, useAppSelector } from "../store/hook";
 import { setTasks } from "../store/counterReducer";
+import { AiOutlinePlus, AiOutlineDelete } from 'react-icons/ai';
+import { BiDotsVerticalRounded } from 'react-icons/bi';
+
 
 interface PropsType {
     project: Project;
+    deleteProject: (id: string) => void;
+
 }
-const TasksComponent = ({ project} : PropsType) => {
+const TasksComponent = ({ project, deleteProject } : PropsType) => {
     const [ viewedTasks, setViewedTasks ] = useState<Task[]>([])
     const [ status, setStatus ] = useState<Status>('ongoing')
+    const [ showCard, setShowCard ] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
     
@@ -20,7 +26,6 @@ const TasksComponent = ({ project} : PropsType) => {
     useEffect(() => {
         if (tasks.length > 0) {
             const taskData = tasks.filter(task => task.status === status)
-            console.log(tasks, status)
             setViewedTasks(taskData)
         }
         else setViewedTasks([])
@@ -32,36 +37,35 @@ const TasksComponent = ({ project} : PropsType) => {
         setViewedTasks(taskData)
     }   
   
-    const updateTask = (type: string, value: string, id: string) => {
-        
-        const updatedTasks = tasks.map((task) => {
-            if (task.id === id) {
-              if (type === "name") {
-                return { ...task, name: value };
-              }
-              else if (type === "dueDate") {
-                const isoDate = value !== "" ? new Date(value).toISOString() : "";
-                return { ...task, dueDate: isoDate };
-              }
-              else if (type === "status") {
-                return { ...task, status: value as 'todo' | 'ongoing' | 'completed'}; 
-            }
-            }
-            return task;
-          });
+    const updateTask = async (type: string, value: string, id: string) => {
+        try {
+            const updatedTasks = tasks.map((task) => {
+                if (task.id === id) {
+                    if (type === "name") {
+                        return { ...task, name: value };
+                    } else if (type === "dueDate") {
+                        const isoDate = value !== "" ? new Date(value).toISOString() : "";
+                        return { ...task, dueDate: isoDate };
+                    } else if (type === "status") {
+                        return { ...task, status: value as 'todo' | 'ongoing' | 'completed' };
+                    }
+                }
+                return task;
+            });
     
-          dispatch(setTasks(updatedTasks))
-          setViewedTasks(updatedTasks)
-          
-        const editedTask = updatedTasks.find((task) => task.id === id);
-
-        if (editedTask) {
-
-            taskService.update(editedTask)
-            .then(res => console.log(res.data))
-            .catch(e => console.log(e))
+            dispatch(setTasks(updatedTasks));
+            setViewedTasks(updatedTasks);
+    
+            const editedTask = updatedTasks.find((task) => task.id === id);
+    
+            if (editedTask) {
+                await taskService.update(editedTask);
+            }
+        } catch (error) {
+            console.error("Error updating task:", error);
         }
-    }
+    };
+    
 
     const openModel = () => {
         try {
@@ -98,16 +102,16 @@ const TasksComponent = ({ project} : PropsType) => {
         }
     };
     
-    const deleteTask = (id: string) => {
+    const deleteTask = async (id: string) => {
         try {
     
             if (id && id !== "") {
 
+                await taskService.delete(id)
+
                 let allTasks = tasks.filter(task => task.id !== id)
                 dispatch(setTasks(allTasks))
             
-                const res = taskService.delete(id)
-                console.log(res)
             }
         }
         catch(e) {
@@ -115,12 +119,42 @@ const TasksComponent = ({ project} : PropsType) => {
         }
     }
 
+    const onDeleteProject = async () => {
+        try {
+            setShowCard(false)
+            deleteProject(project.id)
+        }
+        catch(e) {
+            console.log("Error deleting project", e)
+        }
+    }
+    
     return (
         <div className="task">
             <div className="d-flex justify-space-between align-center">
                 <h2>{project.name}</h2>
-                <button className="new-task-btn" onClick={() => openModel()}>New task</button>
+                <div className="d-flex align-center">
+                    <button className="new-task-btn d-flex " onClick={() => openModel()}>
+                        <AiOutlinePlus style={{ margin:2, fontSize: 14 }}/>
+                        <span>New task</span>
+                    </button>
+                    <div>
+                        <button className="dot-btn d-flex align-center" onClick={() => setShowCard(showCard => !showCard)}>
+                            <BiDotsVerticalRounded/>
+                        </button>
+                    </div>
+                </div>
             </div>
+
+            {showCard && (
+                <div className="card-popup">
+                <button onClick={() => onDeleteProject()} className="delete-btn d-flex justify-space-between align-center">
+                    <AiOutlineDelete style={{ fontSize: 16, marginRight: 4 }}/>
+                    <span>Delete project</span>
+                </button>
+                </div>
+            )}
+
 
             <ul className="status-bar">
                 <li>

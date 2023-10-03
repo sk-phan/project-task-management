@@ -55,3 +55,34 @@
 .new-task-btn:hover {
   opacity: 0.75;
 }
+
+.dot-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.dot-btn:hover {
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+.card-popup {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
+  padding: 10px;
+  position: absolute;
+  top: 70px; /* Adjust the top position */
+  right: 14px; /* Adjust the right position */
+  z-index: 1; /* Ensure it's above other elements */
+}
+
+.delete-btn {
+  background-color: #fff;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}

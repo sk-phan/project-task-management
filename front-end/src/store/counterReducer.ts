@@ -35,7 +35,6 @@ export const counterSlice = createSlice({
       state.value += action.payload
     },
     setTasks: (state, action: PayloadAction<Task[]>) => {
-      console.log(action.payload)
       state.tasks = [...action.payload]
     },
     setProject: (state, action: PayloadAction<Project>) => {

@@ -18,7 +18,6 @@ const ProjectView = () => {
         projectService.getAll()
         .then((res) => {
             if (res.data) {
-                console.log(res.data)
                 setProjects(res.data); 
                 dispatch(setProject(res.data[1]))
             }
@@ -46,6 +45,26 @@ const ProjectView = () => {
         dispatch(setProject(projects[index]))
         setProjectIndex(index)
     }
+
+    const deleteProject = async (id: string) => {
+        try {
+            const projectLength = projects.length
+
+            await projectService.delete(id)
+            const allProjects = projects.filter(project => project.id !== id)
+            setProjects(allProjects)
+
+            if (projectIndex === projectLength - 1) {
+                setProjectIndex(projectIndex => projectIndex - 1)
+            }
+            else {
+                setProjectIndex(projectIndex => projectIndex + 1)
+            }
+        }
+        catch(e) {
+            console.log("Error at deleting project", e)
+        }
+    }
     
     return (
         <div className="container">
@@ -58,6 +77,7 @@ const ProjectView = () => {
             {projects.length > 0 && <div className="tasks-container">
                 <TasksComponent 
                 project={projects[projectIndex]}
+                deleteProject = {deleteProject}
                 />
             </div>}
         </div>
