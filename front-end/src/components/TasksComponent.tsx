@@ -40,7 +40,7 @@ const TasksComponent = ({ project} : PropsType) => {
                 return { ...task, name: value };
               }
               else if (type === "dueDate") {
-                const isoDate = new Date(value).toISOString();
+                const isoDate = value !== "" ? new Date(value).toISOString() : "";
                 return { ...task, dueDate: isoDate };
               }
               else if (type === "status") {
@@ -88,13 +88,31 @@ const TasksComponent = ({ project} : PropsType) => {
 
     }
 
-    const saveTask = (newTask: Task) => {
-        taskService
-        .create(newTask)
-        .then(res => {
-            dispatch(setTasks([res.data, ...tasks]))
-            setStatus('todo')
-        })
+    const saveTask = async (newTask: Task) => {
+        try {
+            const res = await taskService.create(newTask);
+            dispatch(setTasks([res.data, ...tasks]));
+            setStatus('todo');
+        } catch (error) {
+            console.error("Error saving task:", error);
+        }
+    };
+    
+    const deleteTask = (id: string) => {
+        try {
+    
+            if (id && id !== "") {
+
+                let allTasks = tasks.filter(task => task.id !== id)
+                dispatch(setTasks(allTasks))
+            
+                const res = taskService.delete(id)
+                console.log(res)
+            }
+        }
+        catch(e) {
+            console.log("Error at delete task", e)
+        }
     }
 
     return (
@@ -115,7 +133,11 @@ const TasksComponent = ({ project} : PropsType) => {
                     <button className={status === 'completed' ? 'active-status' : ''} onClick={() => setTaskStatus('completed')}>🎉 Done</button>
                 </li>
             </ul>
-            <TaskTable viewedTasks={viewedTasks} updateTask={updateTask}/>
+            <TaskTable 
+                viewedTasks={viewedTasks} 
+                updateTask={updateTask}
+                deleteTask={deleteTask}
+            />
         </div>
     )
 }

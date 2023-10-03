@@ -1,26 +1,30 @@
 import { Task } from "../types"
 import "../styles/TaskTable.css"
 import { useEffect, useState } from "react"
+import { AiOutlineDelete } from 'react-icons/ai';
 
 interface Props {
     viewedTasks: Task[];
     updateTask: (type: string, value: string, id: string) => void;
+    deleteTask: (id: string) => void;
 }
 
-const TaskTable = ({ viewedTasks, updateTask } : Props) => {
+const TaskTable = ({ viewedTasks, updateTask, deleteTask } : Props) => {
 
     const [ taskItems, setTaskItems ] = useState<Task[]>(viewedTasks)
 
     useEffect(() => setTaskItems(viewedTasks), [viewedTasks])
 
     const toLocalDateTime = (isoDate: string) => {
-        const date = new Date(isoDate);
-        const localDate = new Date(
-          date.getTime() - date.getTimezoneOffset() * 60000
-        );
-        return localDate.toISOString().slice(0, 16);
+        if (isoDate !== "") {
+            const date = new Date(isoDate);
+            const localDate = new Date(
+              date.getTime() - date.getTimezoneOffset() * 60000
+            );
+            return localDate.toISOString().slice(0, 16);
+        }
+        return ""
       };
-
     return (
         <table className="custom-table">
             <thead>
@@ -32,7 +36,7 @@ const TaskTable = ({ viewedTasks, updateTask } : Props) => {
             </thead>
             <tbody>
                 {taskItems.map((item) => (
-                <tr key={item.id}>
+                <tr key={item.id} className="row">
                     <td className="field">
                         <input 
                         className="editable-input" 
@@ -40,9 +44,9 @@ const TaskTable = ({ viewedTasks, updateTask } : Props) => {
                         type="text" 
                         onChange={(e) => updateTask('name', e.target.value, item.id)}/>
                     </td>
-                    <td className="field">
+                    <td className="field date-field">
                         <input 
-                            className="editable-input" 
+                            className="editable-input date-input" 
                             value={toLocalDateTime(item.dueDate)}
                             type="datetime-local" 
                             onChange={(e) => updateTask('dueDate', e.target.value, item.id)}/>
@@ -57,6 +61,11 @@ const TaskTable = ({ viewedTasks, updateTask } : Props) => {
                         <option value="todo">Todo</option>
                         <option value="completed">Completed</option>
                     </select>
+                    </td>
+                    <td>
+                        <span className="delete-icon" onClick={() => deleteTask(item.id)}>
+                            <AiOutlineDelete/>
+                        </span>
                     </td>
                 </tr>
                 ))}

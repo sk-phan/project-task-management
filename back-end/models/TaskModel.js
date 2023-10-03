@@ -6,7 +6,6 @@ const taskSchema = new mongoose.Schema({
     },
     dueDate: {
         type: Date,
-        required: true
     },
     status: {
         type: String,

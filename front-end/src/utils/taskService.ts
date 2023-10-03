@@ -12,7 +12,7 @@ const taskService = {
         return api.put('/tasks/update/' + task.id, task)
     },
     delete(taskId: string){
-        return api.put('/tasks/delete/' + taskId)
+        return api.delete('/tasks/delete/' + taskId)
     }
 };
 
