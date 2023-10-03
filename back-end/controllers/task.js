@@ -62,7 +62,7 @@ taskRouter.post('/', async(req, res, next) => {
         project.tasks = project.tasks.concat(newTask._id)
         await project.save()
     
-        res.json(project)
+        res.json(newTask)
     }
     catch(e) {
         next(e)

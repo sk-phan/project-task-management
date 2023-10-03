@@ -2,10 +2,11 @@
     padding: 8px 6px;
     cursor: pointer;
     color: #fff;
-    /* border-bottom: solid 1px #eee; */
+    border-bottom: solid 0.5px #eee5e564;
+    padding: 1rem;
 }
 
 .project-name-card:hover {
-    background-color: var(--light-blue);
+    background-color: #333;
     /* border-bottom: solid 1px #eee; */
 }

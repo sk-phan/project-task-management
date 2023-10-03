@@ -1,6 +1,7 @@
 .custom-table {
     border-collapse: collapse;
     width: 100%;
+    margin-top: 1.8rem;
   }
   
   .custom-table th, .custom-table td {
@@ -9,9 +10,6 @@
     border: 1px solid #ccc;
   }
   
-  .custom-table th {
-    background-color: #f2f2f2;
-  }
 
   .field {
     font-size: 1rem;

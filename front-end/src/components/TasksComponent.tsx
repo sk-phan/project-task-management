@@ -14,11 +14,13 @@ const TasksComponent = ({ project} : PropsType) => {
     const [ status, setStatus ] = useState<Status>('ongoing')
 
     const dispatch = useAppDispatch()
-    const tasks = useAppSelector(state => state.counter.tasks)
+    
+    let tasks = useAppSelector(state => state.counter.tasks)
 
     useEffect(() => {
         if (tasks.length > 0) {
             const taskData = tasks.filter(task => task.status === status)
+            console.log(tasks, status)
             setViewedTasks(taskData)
         }
         else setViewedTasks([])
@@ -63,28 +65,22 @@ const TasksComponent = ({ project} : PropsType) => {
 
     const openModel = () => {
         try {
-            setStatus('todo')
+            const date = new Date();
+            const localDate = new Date(
+              date.getTime() - date.getTimezoneOffset() * 60000
+            );
+            const dueDate = localDate.toISOString().slice(0, 16);
+            const newTask = { 
+                name: "",
+                dueDate: dueDate,
+                project: project.id,
+                status: "todo" as Status,
+                user: project.user,
+                id: ""
+            }
+            
+            saveTask(newTask)
 
-            setTimeout(() => {
-                const date = new Date();
-                const localDate = new Date(
-                  date.getTime() - date.getTimezoneOffset() * 60000
-                );
-                const dueDate = localDate.toISOString().slice(0, 16);
-                const newTask = { 
-                    name: "",
-                    dueDate: dueDate,
-                    project: project.id,
-                    status: "todo" as Status,
-                    user: project.user,
-                    id: ""
-                }
-                
-                setViewedTasks(viewedTasks => [ newTask,...viewedTasks])
-
-                saveTask(newTask)
-
-            }, 200)
         }
         catch(e) {
             console.log("Error at creating new task", e)
@@ -97,6 +93,7 @@ const TasksComponent = ({ project} : PropsType) => {
         .create(newTask)
         .then(res => {
             dispatch(setTasks([res.data, ...tasks]))
+            setStatus('todo')
         })
     }
 
