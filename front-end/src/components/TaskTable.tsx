@@ -25,6 +25,7 @@ const TaskTable = ({ viewedTasks, updateTask, deleteTask } : Props) => {
         }
         return ""
       };
+    
     return (
         <table className="custom-table">
             <thead>
@@ -59,8 +60,8 @@ const TaskTable = ({ viewedTasks, updateTask, deleteTask } : Props) => {
                         style={{ 
                             backgroundColor: item.status === 'ongoing' ? '#feeec4ac' : item.status === 'todo' ? '#ffd8d696' : '#ceefdf86'}}
                     >
-                        <option value="ongoing">Ongoing</option>
-                        <option value="todo">Todo</option>
+                        <option value="ongoing">In progress</option>
+                        <option value="todo">Upcoming</option>
                         <option value="completed">Completed</option>
                     </select>
                     </td>
