@@ -1,18 +1,21 @@
 import { useEffect, useState } from "react"
 import ProjectSideBar from "../components/ProjectsSideBar"
-import { Project, Task } from "../types"
+import { Project } from "../types"
 import projectService from "../utils/projectService"
 import '../styles/ProjectView.css'
 import TasksComponent from "../components/TasksComponent"
 import taskService from "../utils/taskService"
 import { useAppDispatch } from "../store/hook"
 import { setProject, setTasks } from "../store/counterReducer";
+import {FiLogOut } from 'react-icons/fi';
+import { useNavigate } from "react-router"
 
 const ProjectView = () => {
     const [projects, setProjects] = useState<Project[]>([])
     const [projectIndex, setProjectIndex] = useState(0)
     
     const dispatch = useAppDispatch()
+    const navigate = useNavigate()
 
     useEffect(() => {
         projectService.getAll()
@@ -66,12 +69,30 @@ const ProjectView = () => {
         }
     }
     
+    const logOut = () => {
+        try {
+            localStorage.clear()
+            navigate('/login')
+        }
+        catch(e){
+            console.log("Error logou", e)
+        }
+    }
+
     return (
         <div className="container">
-            <div className="projects-container">
+            <div className="projects-container d-flex flex-column ">
+                <div style={{flex: 11}}>
                 {projects.map((project, index) => (
                     <ProjectSideBar key={project.id} project={project} index ={index} setIndex = {setCurrentProject}/>
                 ))}
+                </div>
+                <div className="logout-section d-flex align-center">
+                    <button className="d-flex align-center logout-btn" onClick={() => logOut()}>
+                        <FiLogOut style={{ marginRight: 12 }}/>
+                        Log out
+                    </button>
+                </div>
             </div>
 
             {projects.length > 0 && <div className="tasks-container">

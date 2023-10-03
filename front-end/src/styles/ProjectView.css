@@ -17,3 +17,22 @@
 .tasks-container {
     flex: 5;
 }
+
+.logout-section {
+    padding: 12px 12px;
+    border-top: solid 1px #666;
+    height: 10px !important;
+}
+
+.logout-btn {
+    background: transparent;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    font-family: 'Raleway', sans-serif;
+    cursor: pointer;
+}
+
+.logout-btn:hover {
+    color: #c0bdbd;
+}
