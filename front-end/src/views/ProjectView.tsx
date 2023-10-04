@@ -156,6 +156,7 @@ const ProjectView = () => {
                         project={project} 
                         setIndex = {setCurrentProject}
                         saveProjectName={updateProject}
+                        deleteProject= {deleteProject}
                     />
                 ))}
                 </div>
