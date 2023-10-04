@@ -8,12 +8,16 @@ import taskService from "../utils/taskService"
 import { useAppDispatch } from "../store/hook"
 import { setProject, setTasks } from "../store/counterReducer";
 import {FiLogOut } from 'react-icons/fi';
+import {BsPlus} from 'react-icons/bs';
+import {BiSearch} from 'react-icons/bi';
 import { useNavigate } from "react-router"
 
 const ProjectView = () => {
     const [projects, setProjects] = useState<Project[]>([])
-    const [projectIndex, setProjectIndex] = useState(0)
-    
+    const [projectIndex, setProjectIndex] = useState<number>(0)
+    const [searchValue, setSearchValue] = useState<string>('')
+    const [searchedProjects, setSearchedProjects] = useState<Project[]>([])
+
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
 
@@ -21,7 +25,8 @@ const ProjectView = () => {
         projectService.getAll()
         .then((res) => {
             if (res.data) {
-                setProjects(res.data); 
+                setProjects(res.data);
+                setSearchedProjects(res.data) 
                 dispatch(setProject(res.data[1]))
             }
         })
@@ -31,7 +36,7 @@ const ProjectView = () => {
     }, [])
 
     useEffect(() => {
-        if (projects.length > 0) {
+        if (searchedProjects.length > 0) {
             taskService.getAll(projects[projectIndex].id)
             .then((res) => {
                 if (res.data) {
@@ -42,19 +47,24 @@ const ProjectView = () => {
                 console.error('Error fetching tasks:', error);
             });
         }
-    }, [projects,projectIndex])
+    }, [searchedProjects,projectIndex])
 
-    const setCurrentProject = (index: number) => {
-        dispatch(setProject(projects[index]))
-        setProjectIndex(index)
+    const setCurrentProject = (id: string) => {
+        
+        const index = projects.findIndex(project => project.id === id)
+
+        if (index !== -1) {
+            dispatch(setProject(searchedProjects[index]))
+            setProjectIndex(index)
+        }
     }
 
     const deleteProject = async (id: string) => {
         try {
-            const projectLength = projects.length
+            const projectLength = searchedProjects.length
 
             await projectService.delete(id)
-            const allProjects = projects.filter(project => project.id !== id)
+            const allProjects = searchedProjects.filter(project => project.id !== id)
             setProjects(allProjects)
 
             if (projectIndex === projectLength - 1) {
@@ -75,7 +85,21 @@ const ProjectView = () => {
             navigate('/')
         }
         catch(e){
-            console.log("Error logou", e)
+            console.log("Error logout", e)
+        }
+    }
+
+    const onSearch = (value: string) => {
+        setSearchValue(value)
+        const allProjects = [...searchedProjects]
+        
+        if (value !== "") {
+            const lowerCaseSearch = value.toLowerCase()
+            const filteredProjects = allProjects.filter(project => project.name.toLowerCase().includes(lowerCaseSearch))
+            setSearchedProjects(filteredProjects)
+        }
+        else {
+            setSearchedProjects(projects)
         }
     }
 
@@ -83,7 +107,22 @@ const ProjectView = () => {
         <div className="container">
             <div className="projects-container d-flex flex-column ">
                 <div style={{flex: 11}}>
-                {projects.map((project, index) => (
+                <div className="d-flex align-center">
+                    <div className="input-container">
+                        <BiSearch/>
+                        <input 
+                            type="text" 
+                            className="search-input" 
+                            placeholder="Search"
+                            value={searchValue}
+                            onChange={(e) => onSearch(e.target.value)}
+                        />
+                    </div>
+                    <button className="plus-btn">
+                        <BsPlus />
+                    </button>
+                </div>
+                { searchedProjects.map((project, index) => (
                     <ProjectSideBar key={project.id} project={project} index ={index} setIndex = {setCurrentProject}/>
                 ))}
                 </div>
@@ -95,7 +134,7 @@ const ProjectView = () => {
                 </div>
             </div>
 
-            {projects.length > 0 && <div className="tasks-container">
+            {projects[projectIndex] && <div className="tasks-container">
                 <TasksComponent 
                 project={projects[projectIndex]}
                 deleteProject = {deleteProject}

@@ -35,3 +35,36 @@
 .logout-btn:hover {
     color: #c0bdbd;
 }
+
+
+.plus-btn {
+    width: 32px;    
+    height: 32px;
+    font-size: 24px;
+    background: var(--primary-yellow);
+    border: transparent;
+    border-radius: 5px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.input-container {
+    color: #666;
+    position: relative;
+    border: solid 1px #666;
+    display: flex;
+    align-items: center;
+    margin: 12px;
+    padding-left: 8px;
+    border-radius: 6px;
+    height: 32px;
+    width: 200px;
+ }
+.search-input {
+    background-color: transparent;
+    border: none;
+    outline: none;
+    color: #fff;
+    margin-left: 4px;
+}
