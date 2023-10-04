@@ -1,7 +1,7 @@
 import { Project } from "../types"
 import '../styles/ProjectsSideBar.css'
 import { BsThreeDots } from 'react-icons/bs';
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 
 interface PropsType {
@@ -18,6 +18,21 @@ const ProjectSideBar = ({ project, setIndex, saveProjectName, deleteProject } : 
     const [showCard, setShowCard] = useState<boolean>(false)
     const [isEditing, setIsEditing] = useState<boolean>(false)
     const [editedName, setEditedName] = useState<string>(project.name)
+
+    const cardContainerRef = useRef<HTMLDivElement>(null);
+
+    const handleClickOutside = (e: MouseEvent) => {
+        if (cardContainerRef.current && !cardContainerRef.current.contains(e.target as Node)) {
+          setShowCard(false);
+        }
+      };
+    
+    useEffect(() => {
+        document.addEventListener('click', handleClickOutside);
+        return () => {
+        document.removeEventListener('click', handleClickOutside);
+        };
+    }, []);
 
     const openCard = (e: React.MouseEvent) => {
         e.stopPropagation()
@@ -59,7 +74,7 @@ const ProjectSideBar = ({ project, setIndex, saveProjectName, deleteProject } : 
                 <BsThreeDots style={{ fontSize: 16 }} onClick={(e) => openCard(e)}/>
             }
             {showCard && (
-                <div className="card-container d-flex flex-column">
+                <div ref={cardContainerRef} className="card-container d-flex flex-column">
                 <button onClick={() => editName()} className="d-flex align-center action-btn">
                     <AiOutlineEdit style={{ marginRight: 8 }}/>
                     <span>Edit</span>
