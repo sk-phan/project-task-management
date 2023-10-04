@@ -11,7 +11,7 @@ import ProjectView from './views/ProjectView';
 
 const router = createBrowserRouter([
   {
-    path: "/login",
+    path: "/",
     element: <App />
   },
   {

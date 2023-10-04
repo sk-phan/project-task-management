@@ -72,7 +72,7 @@ const ProjectView = () => {
     const logOut = () => {
         try {
             localStorage.clear()
-            navigate('/login')
+            navigate('/')
         }
         catch(e){
             console.log("Error logou", e)
