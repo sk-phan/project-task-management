@@ -11,22 +11,36 @@ import {FiLogOut } from 'react-icons/fi';
 import {BsPlus} from 'react-icons/bs';
 import {BiSearch} from 'react-icons/bi';
 import { useNavigate } from "react-router"
+import NewTaskModal from "../components/NewTaskModal"
 
 const ProjectView = () => {
     const [projects, setProjects] = useState<Project[]>([])
     const [projectIndex, setProjectIndex] = useState<number>(0)
     const [searchValue, setSearchValue] = useState<string>('')
     const [searchedProjects, setSearchedProjects] = useState<Project[]>([])
+    const [showProjectModal, setShowProjectModal] = useState<boolean>(false)
 
     const dispatch = useAppDispatch()
     const navigate = useNavigate()
+
+    useEffect(() => {
+        const allProjects = [...projects]
+        
+        if (searchValue !== "") {
+            const lowerCaseSearch = searchValue.toLowerCase()
+            const filteredProjects = allProjects.filter(project => project.name.toLowerCase().includes(lowerCaseSearch))
+            setSearchedProjects(filteredProjects)
+        }
+        else {
+            setSearchedProjects(projects)
+        }
+    }, [projects, searchValue])
 
     useEffect(() => {
         projectService.getAll()
         .then((res) => {
             if (res.data) {
                 setProjects(res.data);
-                setSearchedProjects(res.data) 
                 dispatch(setProject(res.data[1]))
             }
         })
@@ -64,8 +78,7 @@ const ProjectView = () => {
             const projectLength = searchedProjects.length
 
             await projectService.delete(id)
-            const allProjects = searchedProjects.filter(project => project.id !== id)
-            setProjects(allProjects)
+            setProjects(projects => projects.filter(project => project.id !== id))
 
             if (projectIndex === projectLength - 1) {
                 setProjectIndex(projectIndex => projectIndex - 1)
@@ -89,17 +102,32 @@ const ProjectView = () => {
         }
     }
 
-    const onSearch = (value: string) => {
-        setSearchValue(value)
-        const allProjects = [...searchedProjects]
-        
-        if (value !== "") {
-            const lowerCaseSearch = value.toLowerCase()
-            const filteredProjects = allProjects.filter(project => project.name.toLowerCase().includes(lowerCaseSearch))
-            setSearchedProjects(filteredProjects)
+    const closeTaskModal = (name: string) => {
+
+        setShowProjectModal(false)
+
+        if (name !== "") {
+            projectService.create(name)
+            .then(res => {
+                setProjects(projects => [res.data, ...projects])
+                setProjectIndex(0)
+            })
         }
-        else {
-            setSearchedProjects(projects)
+    }
+
+    const updateProject = async (updatedProject: Project) => {
+        try {
+            await projectService.update(updatedProject)
+
+            setProjects(projects => projects.map(project => {
+                if (project.id === updatedProject.id) {
+                    return updatedProject
+                }
+                else return project
+            }))
+        }
+        catch(e) {
+            console.log("Error at updating project", e)
         }
     }
 
@@ -115,15 +143,20 @@ const ProjectView = () => {
                             className="search-input" 
                             placeholder="Search"
                             value={searchValue}
-                            onChange={(e) => onSearch(e.target.value)}
+                            onChange={(e) => setSearchValue(e.target.value)}
                         />
                     </div>
-                    <button className="plus-btn">
+                    <button className="plus-btn" onClick={() => setShowProjectModal(true)}>
                         <BsPlus />
                     </button>
                 </div>
                 { searchedProjects.map((project, index) => (
-                    <ProjectSideBar key={project.id} project={project} index ={index} setIndex = {setCurrentProject}/>
+                    <ProjectSideBar 
+                        key={project.id} 
+                        project={project} 
+                        setIndex = {setCurrentProject}
+                        saveProjectName={updateProject}
+                    />
                 ))}
                 </div>
                 <div className="logout-section d-flex align-center">
@@ -140,6 +173,10 @@ const ProjectView = () => {
                 deleteProject = {deleteProject}
                 />
             </div>}
+
+            {
+                showProjectModal && <NewTaskModal closeModal={closeTaskModal}/>
+            }
         </div>
     )
 }

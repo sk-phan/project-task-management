@@ -19,9 +19,12 @@
     text-align: center;
   }
   
+  
   label {
     display: block;
-    margin-top: 10px;
+    margin: 10px 0;
+    text-align: left;
+    font-weight: 600;
   }
   
   input {
@@ -29,19 +32,39 @@
     padding: 8px;
     margin-top: 5px;
     box-sizing: border-box;
+    border: solid 1px #d9d9d9;
+    border-radius: 6px;
+    outline: transparent;
   }
   
   .button-container {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin-top: 20px;
   }
-  
-  .save-btn,
-  .cancel-btn {
-    padding: 10px;
-    width: 48%;
+
+  .btn {
+    padding: 8px 18px;
+    border: transparent;
+    border-radius: 6px;
+    cursor: pointer;
   }
+
+  .btn:hover {
+    opacity: 0.7;
+  }
+
+  .save-btn {
+    background-color: var(--primary-blue);
+    color: #fff;
+    margin-left: 10px;
+  }
+
+
+  .save-btn:disabled {
+    opacity: 0.5;
+  }
+
   
   .open-modal-btn {
     background-color: #4caf50;
