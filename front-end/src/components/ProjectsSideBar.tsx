@@ -8,10 +8,11 @@ interface PropsType {
     project: Project;
     setIndex:  (id: string) => void;
     saveProjectName: (project: Project) => void;
+    deleteProject: (id: string) => void;
 }
 
 
-const ProjectSideBar = ({ project, setIndex, saveProjectName } : PropsType) => {
+const ProjectSideBar = ({ project, setIndex, saveProjectName, deleteProject } : PropsType) => {
 
     const [hoverId, setHoverId] = useState<string>('')
     const [showCard, setShowCard] = useState<boolean>(false)
@@ -60,11 +61,11 @@ const ProjectSideBar = ({ project, setIndex, saveProjectName } : PropsType) => {
             {showCard && (
                 <div className="card-container d-flex flex-column">
                 <button onClick={() => editName()} className="d-flex align-center action-btn">
-                    <AiOutlineEdit />
+                    <AiOutlineEdit style={{ marginRight: 8 }}/>
                     <span>Edit</span>
                 </button>
-                <button className="d-flex align-center action-btn">
-                    <AiOutlineDelete/>
+                <button onClick={() => deleteProject(project.id)} className="d-flex align-center action-btn">
+                    <AiOutlineDelete style={{ marginRight: 8 }}/>
                     <span>Delete</span>
                 </button>
                 </div>
