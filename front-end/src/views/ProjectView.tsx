@@ -12,6 +12,7 @@ import {BsPlus} from 'react-icons/bs';
 import {BiSearch} from 'react-icons/bi';
 import { useNavigate } from "react-router"
 import NewTaskModal from "../components/NewTaskModal"
+import NoProject from "../components/NoProject"
 
 const ProjectView = () => {
     const [projects, setProjects] = useState<Project[]>([])
@@ -37,31 +38,43 @@ const ProjectView = () => {
     }, [projects, searchValue])
 
     useEffect(() => {
-        projectService.getAll()
-        .then((res) => {
+        const fetchData = async () => {
+          try {
+            const res = await projectService.getAll();
+      
             if (res.data) {
-                setProjects(res.data);
-                dispatch(setProject(res.data[1]))
+              let data = [...res.data];
+    
+              setProjects(data);
+              dispatch(setProject(data[0]));
             }
-        })
-        .catch((error) => {
-            console.error('Error fetching projects:', error);
-        });
-
+          } catch (error) {
+            console.error('Error fetching or creating projects:', error);
+          }
+        };
+      
+        fetchData();
+      
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [])
+      }, []);
+      
 
     useEffect(() => {
-        if (searchedProjects.length > 0) {
-            taskService.getAll(projects[projectIndex].id)
-            .then((res) => {
-                if (res.data) {
-                    dispatch(setTasks(res.data)); // Dispatch the action to update Redux store
-                }
-            })
-            .catch((error) => {
-                console.error('Error fetching tasks:', error);
-            });
+        try {
+            if (projects.length > 0 && searchedProjects.length > 0) {
+                taskService.getAll(projects[projectIndex].id)
+                .then((res) => {
+                    if (res.data) {
+                        dispatch(setTasks(res.data)); // Dispatch the action to update Redux store
+                    }
+                })
+                .catch((error) => {
+                    console.error('Error fetching tasks:', error);
+                });
+            }
+        }
+        catch(e) {
+            console.log(e)
         }
         // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchedProjects,projectIndex])
@@ -134,6 +147,21 @@ const ProjectView = () => {
         }
     }
 
+    const createProject = async() => {
+        try {
+            const res = await projectService.create("New project")
+
+            if (res.data) {
+                setProjects(projects => [res.data, ...projects])
+                dispatch(setProject(res.data[0]));
+                setProjectIndex(0)
+            }
+        }
+        catch(e) {
+            console.log("Error creating project", e)
+            alert("Fail to create new project")
+        }
+    }
     return (
         <div className="container">
             <div className="projects-container d-flex flex-column ">
@@ -171,12 +199,14 @@ const ProjectView = () => {
                 </div>
             </div>
 
-            {projects[projectIndex] && <div className="tasks-container">
+            {projects[projectIndex] ? <div className="tasks-container">
                 <TasksComponent 
                 project={projects[projectIndex]}
                 deleteProject = {deleteProject}
                 />
-            </div>}
+            </div>
+            : <NoProject createProject={createProject} />
+            }
 
             {
                 showProjectModal && <NewTaskModal closeModal={closeTaskModal}/>

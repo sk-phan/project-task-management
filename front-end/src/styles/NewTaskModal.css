@@ -27,7 +27,7 @@
     font-weight: 600;
   }
   
-  input {
+  .modal input {
     width: 100%;
     padding: 8px;
     margin-top: 5px;

@@ -1,0 +1,30 @@
+.img {
+    width: 200px;
+    height: 200px;
+}
+
+.empty-project-container {
+    flex: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.empty-project-container p {
+    font-size: 1rem;
+}
+
+.empty-project-container button {
+    background-color: var(--primary-yellow);
+    border: none;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 1rem;
+    margin: 12px 0;
+    cursor: pointer;
+}
+
+.empty-project-container button:hover {
+    opacity: 0.7;
+}
