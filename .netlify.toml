@@ -1,9 +1,0 @@
-[build]
-  base = "front-end/"
-publish = "dist"
-  command = "npm build"
-  
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
