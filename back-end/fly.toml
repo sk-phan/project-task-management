@@ -6,12 +6,35 @@
 app = "project-manangement"
 primary_region = "arn"
 
+[experimental]
+  auto_rollback = true
+
 [build]
 
-[http_service]
-  internal_port = 3000
-  force_https = true
-  auto_stop_machines = true
-  auto_start_machines = true
-  min_machines_running = 0
+[env]
+  PORT = "8080"
+  SECRET = "accessSecret"
+  MONGO_URI = "mongodb+srv://sukiphan97:Nhung1967@cluster0.syysth0.mongodb.net/?retryWrites=true&w=majority"
+
+[[services]]
+  http_checks = []
+  internal_port = 8080 
   processes = ["app"]
+
+  [[services.ports]]
+    port = 80
+    handlers = ["http"]
+    force_https = true
+
+  [[services.ports]]
+    port = 443
+    handlers = ["tls", "http"]
+  [services.concurrency]
+    type = "connections"
+    hard_limit = 25
+    soft_limit = 20
+
+  [[services.tcp_checks]]
+    interval = "15s"
+    timeout = "2s"
+    grace_period = "1s"
