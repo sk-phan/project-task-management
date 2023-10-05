@@ -13,23 +13,33 @@ const LoginView = () => {
 
     const [ email, setEmail ] = useState('')
     const [ password, setPassword ] = useState('')
+    const [loading, setLoading] = useState(false); 
 
     const navigate = useNavigate()
 
-    const onLogIn = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault()
-
-        const res = await authService.login({ email, password })
-
-        if(res.data) {
-            const user: User = res.data
-            localStorage.setItem('user', user.token)
-            localStorage.setItem('token', user.token)
-            navigate('/projects')
+    const onLogIn = async (e: React.FormEvent<HTMLFormElement>) => {
+        e.preventDefault();
+    
+        // Set loading to true when login is initiated
+        setLoading(true);
+    
+        try {
+          const res = await authService.login({ email, password });
+    
+          if (res.data) {
+            const user: User = res.data;
+            localStorage.setItem('user', user.token);
+            localStorage.setItem('token', user.token);
+            navigate('/projects');
+          }
+        } catch (error) {
+          console.error('Error during login:', error);
+          alert("Invalid username or password")
+        } finally {
+          // Set loading back to false when the login process is complete
+          setLoading(false);
         }
-
-    }
-
+      };
     return (
         <div className="login-container">
             <div className="login-form">
@@ -50,7 +60,17 @@ const LoginView = () => {
                         value={password}
                         onChange={e => setPassword(e.target.value)}
                     />
-                    <button type="submit" className="login-button dark-bg">Log in</button>
+                    
+                     {loading ? (
+                        <button className="login-button dark-bg">
+                            <div className="loader"></div>
+                        </button>
+                    ) : (
+                        <button type="submit" className="login-button dark-bg">
+                        Log in
+                        </button>
+                    )}
+                    {/* <button type="submit" className="login-button dark-bg">Log in</button> */}
                 </form>
 
                 <div className='signup-link'>
