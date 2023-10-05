@@ -37,7 +37,7 @@ const SignupView = () => {
         <div className="login-container">
             <div className="login-form">
                 <img className='logo' src='/TaskHub.png' alt='logo' />
-                <h2>Welcome back!</h2>
+                <h2>Let's get started!</h2>
                 <form onSubmit={onSignUp}>
                     <input 
                         type="email" 

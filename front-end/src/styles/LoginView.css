@@ -108,6 +108,27 @@
     text-decoration: none;
 }
 
+.star-icon {
+    color: var(--primary-yellow);
+    margin-right: 4px;
+}
+
+.testing-account {
+    justify-content: flex-start;
+    width: 100%;
+    font-size: 14px;
+    margin-top: 24px;
+    gap: 6px;
+}
+
+.testing-account p {
+    font-weight: 600;
+}
+
+.testing-account span {
+    margin-left: 16px;
+}
+
 /* Media query for smaller screens (mobile devices) */
 @media (max-width: 768px) {
     .login-container {

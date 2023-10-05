@@ -3,6 +3,7 @@ import '../styles/LoginView.css';
 import { useState } from 'react';
 import authService from '../utils/authService';
 import { User } from '../types';
+import { LuSparkles } from 'react-icons/lu';
 
 const LoginView = () => {
 
@@ -65,6 +66,14 @@ const LoginView = () => {
                         Log in
                         </button>
                     )}
+                    <div className='d-flex flex-column testing-account'>
+                        <p>
+                            <LuSparkles className='star-icon'/>
+                            Testing credientials:
+                        </p>
+                        <span>Email: test.sk@gmail.com</span>
+                        <span>Password: Happy2023</span>
+                    </div>
                 </form>
 
                 <div className='signup-link'>
