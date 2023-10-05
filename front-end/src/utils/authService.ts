@@ -9,6 +9,9 @@ const authService = {
   login(credientials: Credientials) {
     return api.post('/login', credientials);
   },
+  signUp(credientials: Credientials) {
+    return api.post('/user', credientials)
+  }
 };
 
 export default authService;

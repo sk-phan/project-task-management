@@ -18,3 +18,10 @@ export interface Project {
     id: string;
     user: string;
 }
+
+
+export interface User {
+    token: string;
+    email: string;
+    id: string;
+} 

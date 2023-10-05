@@ -2,12 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import '../styles/LoginView.css';
 import { useState } from 'react';
 import authService from '../utils/authService';
-
-interface User {
-    token: string;
-    email: string;
-    id: string;
-} 
+import { User } from '../types';
 
 const LoginView = () => {
 
@@ -70,7 +65,6 @@ const LoginView = () => {
                         Log in
                         </button>
                     )}
-                    {/* <button type="submit" className="login-button dark-bg">Log in</button> */}
                 </form>
 
                 <div className='signup-link'>

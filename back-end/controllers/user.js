@@ -1,6 +1,7 @@
 const bcrypt = require('bcryptjs')
 const userRouter = require('express').Router()
 const User = require('../models/UserModel')
+const jwt = require('jsonwebtoken')
 
 //Create user
 userRouter.post('/', async (req, res, next) => {
@@ -14,11 +15,17 @@ userRouter.post('/', async (req, res, next) => {
         const newUser = await new User({ email, passwordHash })
     
         const savedUser = await newUser.save()
+
+        const userForToken = {
+            email: savedUser.email,
+            id: savedUser._id
+        }
     
-        res.status(201).json(savedUser)
+        const token = jwt.sign(userForToken, process.env.SECRET)
+    
+        res.status(201).json({token, ...userForToken})
     }
     catch(e) {
-        console.log(e.code, e.keyPattern, "hello")
         if (e.code === 11000 && e.keyPattern && e.keyPattern.email === 1) {
             // This error code (11000) indicates a duplicate key error.
             // The keyPattern.email === 1 checks if the duplicate key is for the 'email' field.
