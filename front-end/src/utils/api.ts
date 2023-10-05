@@ -5,11 +5,18 @@ export const logout = () => {
   window.location.href = '/';
 };
 
+const baseURL =
+  process.env.NODE_ENV === 'production'
+    ? process.env.REACT_APP_API_BASE_URL_PROD
+    : process.env.REACT_APP_API_BASE_URL_DEV;
+
 // Create a new Axios instance
 const api = axios.create({
-  baseURL: 'http://localhost:8080/api', // Replace with your API's base URL
+  baseURL, // Replace with your API's base URL
   timeout: 5000, // Adjust the timeout as needed
 });
+
+
 
 // Add an interceptor to set the Authorization header with the token
 api.interceptors.request.use(
