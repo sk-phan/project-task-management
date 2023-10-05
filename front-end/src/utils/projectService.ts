@@ -3,7 +3,7 @@ import { Project } from "../types";
 
 const projectService = {
     getAll() {
-        return api.get('/projects');
+        return api.get<Project[]>('/projects');
     },
     getOne(projectId: string) {
         return api.get('/projects/' +  projectId)
@@ -14,7 +14,7 @@ const projectService = {
     update(project: Project) {
         return api.put('projects/update/' + project.id, project )
     },
-    delete(projectId: number) {
+    delete(projectId: string) {
         return api.delete('projects/delete/' + projectId)
     }
 };

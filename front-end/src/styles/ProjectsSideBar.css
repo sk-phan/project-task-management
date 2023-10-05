@@ -1,0 +1,54 @@
+.project-name-card {
+    padding: 8px 6px;
+    cursor: pointer;
+    color: #fff;
+    border-bottom: solid 0.5px #eee5e564;
+    padding: 1rem;
+    position: relative;
+
+}
+
+.project-name-card:hover {
+    background-color: #333;
+}
+
+.dot-btn {
+    background-color: transparent;
+    color: #eee;
+    border: none;
+}
+
+.dot-btn:hover {
+    background-color: none;
+}
+
+.card-container {
+    background-color: #444;
+    width: 200px;
+    border-radius: 6px;
+    position: absolute;
+    bottom: -80px;
+    right: 0;
+    z-index: 999;
+}
+
+.action-btn {
+    background-color: transparent;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    padding: 16px;
+}
+
+.action-btn:hover {
+    width: 100%;
+    height: 100%;
+    background-color: rebeccapurple;
+}
+
+.edited-input {
+    background-color: transparent;
+    outline: none;
+    border: none;
+    color: #fff;
+}

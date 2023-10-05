@@ -15,7 +15,7 @@ const SignupView = () => {
 
                 <div className='signup-link'>
                     <span>Already a user?</span>
-                    <Link to='/login'>Login</Link>
+                    <Link to='/'>Login</Link>
                 </div>
             </div>
             <div className="login-image-container">

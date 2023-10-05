@@ -1,0 +1,88 @@
+.task {
+  margin: 48px 24px;
+}
+.status-bar {
+  display: flex;
+  flex-direction: row;
+  list-style: none;
+  padding: 0;
+  margin-top: 2.2rem;
+}
+
+.status-bar li {
+  margin-right: 3rem;
+}
+
+.status-bar > li > button {
+  background-color: transparent;
+  border: none; 
+  cursor: pointer;
+  font-size: 1rem;
+}
+
+.status-bar > li > button {
+  background-color: transparent;
+  border: none; 
+  padding: 4px;
+  border-radius: 5px;
+  position: relative;
+}
+
+.status-bar > li > button:hover {
+  background-color: #eee;
+}
+
+.active-status::after {
+  content: "";
+  position: absolute;
+  background-color: #000;
+  height: 2px;
+  width: 100%;
+  bottom: -5px;
+  left: 0;
+}
+
+.new-task-btn {
+  background-color: var(--primary-blue);
+  color: #ffffff;
+  border: none;
+  padding: 8px 18px;
+  border-radius: 6px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+
+.new-task-btn:hover {
+  opacity: 0.75;
+}
+
+.dot-btn {
+  background-color: transparent;
+  border: none;
+  font-size: 1.6rem;
+  cursor: pointer;
+  margin-left: 1rem;
+  position: relative;
+}
+
+.dot-btn:hover {
+  background-color: #eee;
+  border-radius: 10px;
+}
+
+.card-popup {
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add box shadow for a subtle effect */
+  padding: 10px;
+  position: absolute;
+  top: 70px; /* Adjust the top position */
+  right: 14px; /* Adjust the right position */
+  z-index: 1; /* Ensure it's above other elements */
+}
+
+.delete-btn {
+  background-color: #fff;
+  padding: 5px 10px;
+  border: none;
+  cursor: pointer;
+}

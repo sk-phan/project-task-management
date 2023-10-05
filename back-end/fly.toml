@@ -1,0 +1,22 @@
+# fly.toml app configuration file generated for suki-project-management on 2023-10-05T19:26:45+03:00
+#
+# See https://fly.io/docs/reference/configuration/ for information about how to use this file.
+#
+
+app = "suki-project-management"
+primary_region = "arn"
+
+[build]
+
+[env]
+  MONGODB_URI = "mongodb+srv://sukiphan97:Nhung1967@cluster0.syysth0.mongodb.net/?retryWrites=true&w=majority"
+  PORT = "3000"
+  SECRET = "sekret"
+
+[http_service]
+  internal_port = 3000
+  force_https = true
+  auto_stop_machines = true
+  auto_start_machines = true
+  min_machines_running = 0
+  processes = ["app"]

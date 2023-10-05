@@ -1,0 +1,81 @@
+.custom-table {
+    border-collapse: collapse;
+    width: 100%;
+    margin-top: 1.8rem;
+
+  }
+  
+  .custom-table th, .custom-table td {
+    text-align: left;
+    padding: 8px;
+  }
+
+  .row {
+    border-bottom: solid 1px #dddddd;
+  }
+
+  .field {
+    font-size: 1rem;
+  }
+
+  .date-field {
+    width: 150px;
+  }
+  
+  .field:hover {
+    background: #eee; 
+  }
+
+  .editable-input {
+    border: none;
+    background: transparent; 
+    width: 100%;
+    outline: none; 
+    font-size: 1rem;
+
+  }
+
+  .date-input {
+    font-family: 'Raleway', sans-serif !important;
+  }
+
+  .status-select {
+    width: 150px;
+    max-width: 200px;
+    padding: 8px;
+    font-size: 0.8rem;
+    border: none;
+    border-radius: 4px;
+    appearance: none; /* Remove default arrow icon */
+    background-color: #4ee99223;
+    background-image: linear-gradient(45deg, transparent 50%, #aaa 50%),
+    linear-gradient(135deg, #aaa 50%, transparent 50%);
+    background-position: calc(100% - 20px) calc(1em + 2px),
+    calc(100% - 15px) calc(1em + 2px);
+    background-size: 5px 5px, 5px 5px;
+    background-repeat: no-repeat;
+  }
+
+  .status-select:focus {
+    border-color: transparent;
+    outline: none;
+  }
+
+  .status-select option {
+    background-color: #ceeff8;
+    color: #333;
+  }
+
+  .status-select::after {
+    content: '\25BC'; /* Unicode arrow down character */
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    pointer-events: none;
+  }
+
+  .delete-icon {
+    font-size: 1.2rem;
+    cursor: pointer;
+  }
