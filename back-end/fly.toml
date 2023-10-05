@@ -1,18 +1,17 @@
-# fly.toml app configuration file generated for muddy-snowflake-5709 on 2023-10-05T19:19:25+03:00
+# fly.toml app configuration file generated for suki-project-management on 2023-10-05T19:26:45+03:00
 #
 # See https://fly.io/docs/reference/configuration/ for information about how to use this file.
 #
 
-app = "muddy-snowflake-5709"
+app = "suki-project-management"
 primary_region = "arn"
 
 [build]
 
 [env]
+  MONGODB_URI = "mongodb+srv://sukiphan97:Nhung1967@cluster0.syysth0.mongodb.net/?retryWrites=true&w=majority"
   PORT = "3000"
   SECRET = "sekret"
-  MONGODB_URI = "mongodb+srv://sukiphan97:Nhung1967@cluster0.syysth0.mongodb.net/?retryWrites=true&w=majority"
-
 
 [http_service]
   internal_port = 3000
