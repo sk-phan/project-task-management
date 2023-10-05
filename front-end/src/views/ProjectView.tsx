@@ -47,6 +47,8 @@ const ProjectView = () => {
         .catch((error) => {
             console.error('Error fetching projects:', error);
         });
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     useEffect(() => {
@@ -61,6 +63,7 @@ const ProjectView = () => {
                 console.error('Error fetching tasks:', error);
             });
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [searchedProjects,projectIndex])
 
     const setCurrentProject = (id: string) => {
