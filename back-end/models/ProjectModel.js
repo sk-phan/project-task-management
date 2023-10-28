@@ -1,5 +1,24 @@
 const mongoose = require('mongoose');
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Project:
+ *       type: object
+ *       properties:
+ *         id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         tasks:
+ *           type: array
+ *           items:
+ *             $ref: '#/components/schemas/Task'
+ *         user:
+ *           type: string
+ */
+
 const projectSchema = new mongoose.Schema({
     name: {
         type: String,

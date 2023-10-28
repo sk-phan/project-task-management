@@ -1,6 +1,8 @@
 const config = require('./config');
 const logger = require('./logger')
 const middleware = require('./middleware');
+const swaggerUi = require('swagger-ui-express');
+const swaggerJsDoc = require('swagger-jsdoc');
 
 const express = require('express');
 const cors = require('cors');
@@ -27,6 +29,28 @@ app.use(cors());
 app.use(express.static('build'));
 app.use(express.json());
 app.use(middleware.requestLogger);
+
+const swaggerOptions = {
+  definition: {
+    openapi: '3.0.0',
+    info: {
+      title: 'My API',
+      version: '1.0.0',
+      description: 'A sample API for learning Swagger',
+    },
+    servers: [
+      {
+        url: 'http://localhost:3000/api/',
+      },
+    ],
+  },
+  apis: ['./controllers/*.js', './models/*.js'],
+};
+
+const swaggerDocs = swaggerJsDoc(swaggerOptions);
+app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+
+
 
 app.use('/api/login', loginRouter);
 app.use('/api/user', userRouter);

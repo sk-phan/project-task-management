@@ -2,6 +2,28 @@ const projectRouter = require('express').Router();
 const Project = require("../models/ProjectModel");
 const Task = require('../models/TaskModel');
 
+// controllers/project.js
+
+/**
+ * @swagger
+ * /projects:
+ *   get:
+ *     tags:
+ *       - Project
+ *     summary: Get all projects
+ *     description: Retrieve a list of all projects
+ *     responses:
+ *       '200':
+ *         description: A list of projects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ */
+
+
 projectRouter.get('/', async(req, res, next) => {
 
     try {
@@ -83,6 +105,7 @@ projectRouter.put('/update/:id', async (req, res, next) => {
         next(e)
     }
 });
+
 
 projectRouter.delete('/delete/:id', async (req, res, next) => {
 

@@ -4,6 +4,33 @@ const User = require('../models/UserModel')
 const jwt = require('jsonwebtoken')
 
 //Create user
+// controllers/user.js
+
+/**
+ * @swagger
+ * /api/user:
+ *   post:
+ *     tags:
+ *       - User
+ *     summary: Create a user
+ *     description: Retrieve a list of all projects
+ *     requestBody: 
+ *       required: true
+ *       contents:
+ *         application/json:
+ *           schema:
+ *             $ref/: '#/components/schemas/User'
+ *     responses:
+ *       '200':
+ *         description: A list of projects
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Project'
+ */
+
 userRouter.post('/', async (req, res, next) => {
 
     try {
