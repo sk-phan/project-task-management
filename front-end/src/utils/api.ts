@@ -5,7 +5,7 @@ export const logout = () => {
   window.location.href = '/';
 };
 
-const baseURL = "https://suki-project-management.fly.dev"
+const baseURL = "https://suki-project-management.fly.dev/api"
     
 // Create a new Axios instance
 const api = axios.create({
