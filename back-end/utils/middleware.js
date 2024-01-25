@@ -49,7 +49,7 @@ const userExtract = async (request, response, next) => {
 
     if (authorization && authorization.startsWith('Bearer ')) {
         const token = authorization.replace('Bearer ', '');
-        const decodedToken = await jwt.verify( token, process.env.SECRET )
+        const decodedToken = await jwt.verify( token, 'sekret' )
 
         if (!decodedToken.id) {
             return response.status(401).json({ error: 'Token invalid' });

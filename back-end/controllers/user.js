@@ -8,7 +8,6 @@ userRouter.post('/', async (req, res, next) => {
 
     try {
         const { email, password } = req.body
-    
         const saltRound = 10
         const passwordHash = await bcrypt.hash(password, saltRound)
     
@@ -20,12 +19,14 @@ userRouter.post('/', async (req, res, next) => {
             email: savedUser.email,
             id: savedUser._id
         }
+        console.log(userForToken)
     
-        const token = jwt.sign(userForToken, process.env.SECRET)
-    
+        const token = jwt.sign(userForToken, "sekret")
+        
         res.status(201).json({token, ...userForToken})
     }
     catch(e) {
+        console.log(e)
         if (e.code === 11000 && e.keyPattern && e.keyPattern.email === 1) {
             // This error code (11000) indicates a duplicate key error.
             // The keyPattern.email === 1 checks if the duplicate key is for the 'email' field.
