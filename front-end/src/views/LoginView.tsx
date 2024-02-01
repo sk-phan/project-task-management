@@ -71,7 +71,7 @@ const LoginView = () => {
                             <LuSparkles className='star-icon'/>
                             Testing credientials:
                         </p>
-                        <span>Email: test.taskhub@gmail.com</span>
+                        <span>Email: tester@taskhub.com</span>
                         <span>Password: Happy2023</span>
                     </div>
                 </form>
